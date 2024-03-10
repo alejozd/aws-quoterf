@@ -17,8 +17,8 @@ const Clientes = () => {
     const [clientes, setClientes] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [newClienteData, setNewClienteData] = useState({
-        nombre: '',
-        apellido: '',
+        nombres: '',
+        apellidos: '',
         identidad: '',
         telefono: ''
     });
@@ -105,8 +105,8 @@ const Clientes = () => {
     const resetNewClienteData = () => {
         setNewClienteData({
             id: '',
-            nombre: '',
-            apellido: '',
+            nombres: '',
+            apellidos: '',
             identidad: '',
             telefono: ''
         });
@@ -171,8 +171,8 @@ const Clientes = () => {
                 <div>
                     <DataTable value={clientes} header={header} loading={loading}
                         responsive="true" paginator rows={10} rowsPerPageOptions={[5, 10, 25]}>
-                        <Column field="NOMBRE_CLI" header="Nombre" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="APELLIDO_CLI" header="Apellido" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                        <Column field="NOMBRES" header="Nombres" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                        <Column field="APELLIDOS" header="Apellidos" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
                         <Column field="IDENTIDAD" header="Identidad" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
                         <Column field="TELEFONO" header="Telefono" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
                         <Column header="Acciones" headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} body={renderActions} />
@@ -185,12 +185,12 @@ const Clientes = () => {
                         <div className="flex flex-wrap gap-3 mb-4">
                             <input type="hidden" id="id" value={newClienteData.id} /> {/* Input oculto para el id del cliente */}
                             <div className="flex-auto">
-                                <label htmlFor="nombre" className="font-bold block mb-2">Nombre</label>
-                                <InputText id="nombre" type="text" className="p-inputtext-sm" placeholder="Nombre" value={newClienteData.nombre} onChange={(e) => setNewClienteData({ ...newClienteData, nombre: e.target.value })} />
+                                <label htmlFor="nombres" className="font-bold block mb-2">Nombre</label>
+                                <InputText id="nombres" type="text" className="p-inputtext-sm" placeholder="Nombres" value={newClienteData.nombres} onChange={(e) => setNewClienteData({ ...newClienteData, nombres: e.target.value })} />
                             </div>
                             <div className="flex-auto">
-                                <label htmlFor="apellido" className="font-bold block mb-2">Apellido</label>
-                                <InputText id="apellido" type="text" className="p-inputtext-sm" placeholder="Apellido" value={newClienteData.apellido} onChange={(e) => setNewClienteData({ ...newClienteData, apellido: e.target.value })} />
+                                <label htmlFor="apellidos" className="font-bold block mb-2">Apellido</label>
+                                <InputText id="apellidos" type="text" className="p-inputtext-sm" placeholder="Apellidos" value={newClienteData.apellidos} onChange={(e) => setNewClienteData({ ...newClienteData, apellidos: e.target.value })} />
                             </div>
                             <div className="flex-auto">
                                 <label htmlFor="identidad" className="font-bold block mb-2">Identidad</label>
@@ -210,7 +210,7 @@ const Clientes = () => {
                 {/* Diálogo de confirmación para eliminar */}
                 <Dialog header="Confirmar Eliminación" visible={confirmDialogVisible} onHide={() => setConfirmDialogVisible(false)} footer={footerContent}>
                     <div>
-                        <p>¿Estás seguro que deseas eliminar al cliente {rowDataToDelete && `${rowDataToDelete.NOMBRE_CLI} ${rowDataToDelete.APELLIDO_CLI}`}?</p>
+                        <p>¿Estás seguro que deseas eliminar al cliente {rowDataToDelete && `${rowDataToDelete.NOMBRES} ${rowDataToDelete.APELLIDOS}`}?</p>
                     </div>
                 </Dialog>
             </div>
