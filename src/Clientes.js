@@ -93,9 +93,9 @@ const Clientes = () => {
         // Implementa la lógica para editar el cliente
         console.log('Editar cliente:', rowData);
         setNewClienteData({
-            id: rowData.IDCLIENTES,
-            nombre: rowData.NOMBRES,
-            apellido: rowData.APELLIDOS,
+            id: rowData.IDCLIENTE,
+            nombres: rowData.NOMBRES,
+            apellidos: rowData.APELLIDOS,
             identidad: rowData.IDENTIDAD,
             telefono: rowData.TELEFONO
         });
@@ -120,8 +120,9 @@ const Clientes = () => {
     }
 
     const confirmDelete = () => {
-        // Implementa la lógica para eliminar el cliente
-        axios.delete(`${apiUrl}/clientes/${rowDataToDelete.id}`)
+        // Implementa la lógica para eliminar el cliente        
+        console.log('rowDataToDelete.IDCLIENTE', rowDataToDelete.IDCLIENTE);
+        axios.delete(`${apiUrl}/clientes/${rowDataToDelete.IDCLIENTE}`)
             .then(response => {
                 console.log(response.data.message);
                 fetchClientes(); // Volver a cargar la lista de clientes después de eliminar

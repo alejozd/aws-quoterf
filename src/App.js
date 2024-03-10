@@ -5,7 +5,7 @@ import Navbar from './Navbar'; // Importa tu componente Navbar
 import Home from './Home'; // Importa tu componente Home
 import Clientes from './Clientes'; // Importa tu componente Clientes
 import Contacto from './Contacto'; // Importa tu componente Contacto
-// import Productos from './Productos'; // Importa tu componente Productos
+import Productos from './Productos'; // Importa tu componente Productos
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/clientes" element={<Clientes />} />
-            {/* <Route path='/productos' element={<Productos />} /> */}
+            <Route path='/productos' element={<Productos />} />
             <Route path="/contacto" element={<Contacto />} />
           </Routes>
         </div>
