@@ -17,6 +17,7 @@ const Clientes = () => {
     const [clientes, setClientes] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [newClienteData, setNewClienteData] = useState({
+        id: '',
         nombres: '',
         apellidos: '',
         identidad: '',
@@ -185,11 +186,11 @@ const Clientes = () => {
                         <div className="flex flex-wrap gap-3 mb-4">
                             <input type="hidden" id="id" value={newClienteData.id} /> {/* Input oculto para el id del cliente */}
                             <div className="flex-auto">
-                                <label htmlFor="nombres" className="font-bold block mb-2">Nombre</label>
+                                <label htmlFor="nombres" className="font-bold block mb-2">Nombres</label>
                                 <InputText id="nombres" type="text" className="p-inputtext-sm" placeholder="Nombres" value={newClienteData.nombres} onChange={(e) => setNewClienteData({ ...newClienteData, nombres: e.target.value })} />
                             </div>
                             <div className="flex-auto">
-                                <label htmlFor="apellidos" className="font-bold block mb-2">Apellido</label>
+                                <label htmlFor="apellidos" className="font-bold block mb-2">Apellidos</label>
                                 <InputText id="apellidos" type="text" className="p-inputtext-sm" placeholder="Apellidos" value={newClienteData.apellidos} onChange={(e) => setNewClienteData({ ...newClienteData, apellidos: e.target.value })} />
                             </div>
                             <div className="flex-auto">
