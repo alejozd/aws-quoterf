@@ -7,6 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { Toast } from 'primereact/toast';
 import Config from './Config';
 import axios from 'axios';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -27,6 +28,7 @@ const Productos = () => {
     const [loading, setLoading] = useState(true);
     const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
     const [rowDataToDelete, setRowDataToDelete] = useState(null);
+    const toastTopRight = useRef(null);
 
     // Función para cargar los productos
     const fetchProductos = useCallback(() => {
@@ -63,6 +65,7 @@ const Productos = () => {
                     setShowModal(false);
                     fetchProductos(); // Otra función para recargar la lista de productos
                     resetNewProductoData();
+                    showMessage(e, toastTopRight, 'success', 'Actualizado', 'Producto actualizado correctamente');
                 })
                 .catch(error => {
                     console.error('Error al actualizar el productos:', error);
@@ -195,6 +198,7 @@ const Productos = () => {
                     <h1>Listado de Productos</h1>
                 </div>
                 <div>
+                    <Toast ref={toastTopRight} position="top-right" />
                     {loading && <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />}
                     {!loading && (
                         <DataTable value={productos} header={header} responsive="true" id="IDPRODUCTO"
