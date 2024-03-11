@@ -71,7 +71,7 @@ const Productos = () => {
                     setShowModal(false);
                     fetchProductos(); // Otra función para recargar la lista de productos
                     resetNewProductoData();
-                    showMessage(toastTopRight, 'Info', newProductoData.nombre, 'Producto actualizado correctamente');
+                    showMessage(toastTopRight, 'info', newProductoData.nombre, 'Producto actualizado correctamente');
                 })
                 .catch(error => {
                     console.error('Error al actualizar el productos:', error);
@@ -89,7 +89,7 @@ const Productos = () => {
                     setShowModal(false);
                     fetchProductos(); // Otra función para recargar la lista de productos
                     resetNewProductoData();
-                    showMessage(toastTopRight, 'Success', newProductoData.nombre, 'Producto creado correctamente');
+                    showMessage(toastTopRight, 'success', newProductoData.nombre, 'Producto creado correctamente');
                 })
                 .catch(error => {
                     console.error('Error al agregar el producto:', error);
@@ -135,7 +135,7 @@ const Productos = () => {
             .then(response => {
                 console.log(response.data.message);
                 fetchProductos(); // Volver a cargar la lista de clientes después de eliminar
-                showMessage(toastTopRight, 'Warn', newProductoData.nombre, 'Producto eliminado correctamente');
+                showMessage(toastTopRight, 'warn', newProductoData.nombre, 'Producto eliminado correctamente');
             })
             .catch(error => {
                 console.error('Error al eliminar el producto:', error);
