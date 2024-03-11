@@ -8,21 +8,25 @@ const Navbar = () => {
             label: 'Inicio',
             icon: 'pi pi-home',
             url: '/',
+            id: 'inicio',
         },
         {
             label: 'Clientes',
             icon: 'pi pi-users',
             url: '/clientes',
+            id: 'clientes',
         },
         {
             label: 'Productos',
             icon: 'pi pi-th-large',
             url: '/productos',
+            id: 'productos',
         },
         {
             label: 'Contacto',
             icon: 'pi pi-envelope',
             url: '/contacto',
+            id: 'contacto',
         }
     ];
 

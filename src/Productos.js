@@ -5,6 +5,8 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { InputNumber } from 'primereact/inputnumber';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import Config from './Config';
 import axios from 'axios';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -98,12 +100,13 @@ const Productos = () => {
     // Función para editar un producto
     const handleEdit = (rowData) => {
         // Implementa la lógica para editar el cliente
-        console.log('Editar cliente:', rowData);
+        console.log('Editar producto:', rowData);
+        // const formattedPrice = formatCurrency(rowData);
         setNewProductoData({
-            id: rowData.IDPRODUCTOS,
+            id: rowData.IDPRODUCTO,
             nombre: rowData.NOMBRE,
             referencia: rowData.REFERENCIA,
-            precio: rowData.PRECIO
+            precio: rowData.PRECIO, //formattedPrice,
         });
         setShowModal(true); // Mostrar el modal de edición
     };
@@ -117,7 +120,8 @@ const Productos = () => {
 
     const confirmDelete = () => {
         // Implementa la lógica para eliminar el cliente
-        axios.delete(`${apiUrl}/productos/${rowDataToDelete.id}`)
+        console.log('Eliminar:', rowDataToDelete);
+        axios.delete(`${apiUrl}/productos/${rowDataToDelete.IDPRODUCTO}`)
             .then(response => {
                 console.log(response.data.message);
                 fetchProductos(); // Volver a cargar la lista de clientes después de eliminar
@@ -168,10 +172,21 @@ const Productos = () => {
 
     const header = renderHeader();
 
-    const formatCurrency = (rowData) => {
-        return rowData.PRECIO.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }); // Cambia 'EUR' según la moneda que desees
-    }
+    // const formatCurrency = (rowData) => {
+    //     return rowData.PRECIO.toLocaleString('es-CO', {
+    //         style: 'currency', currency: 'COP'
+    //     }); // Cambia 'EUR' según la moneda que desees
+    // }
 
+    const formatCurrency = (rowData) => {
+        const formattedPrice = new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            minimumFractionDigits: 0, // Para evitar decimales en números enteros
+        }).format(rowData.PRECIO);
+
+        return formattedPrice;
+    };
 
     return (
         <div>
@@ -180,35 +195,59 @@ const Productos = () => {
                     <h1>Listado de Productos</h1>
                 </div>
                 <div>
-                    <DataTable value={productos} header={header} responsive="true" id="IDPRODUCTO"
-                        loading={loading} paginator rows={10} rowsPerPageOptions={[5, 10, 25]}>
-                        <Column field="NOMBRE" header="Nombre" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="REFERENCIA" header="Referencia" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="PRECIO" header="Precio" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} body={formatCurrency} />
-                        <Column header="Acciones" headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} body={renderActions} />
-                    </DataTable>
+                    {loading && <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />}
+                    {!loading && (
+                        <DataTable value={productos} header={header} responsive="true" id="IDPRODUCTO"
+                            loading={loading} paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
+                            removableSort showGridlines>
+                            <Column field="NOMBRE" header="Nombre" sortable
+                                headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                            <Column field="REFERENCIA" header="Referencia" sortable
+                                headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                            <Column field="PRECIO" header="Precio" headerStyle={{ textAlign: 'center', fontSize: '1.2em' }}
+                                dataType="numeric" sortable body={formatCurrency} />
+                            <Column header="Acciones" headerStyle={{ textAlign: 'center', fontSize: '1.2em' }}
+                                body={renderActions} />
+                        </DataTable>
+                    )}
                 </div>
                 {/* Modal para agregar/editar producto */}
                 <Dialog visible={showModal} onHide={() => setShowModal(false)} header="Agregar/Editar Producto">
                     <div className="card">
-                        <div >
+                        <div className="flex flex-wrap gap-3 mb-4">
                             {/* Formulario para agregar/editar producto */}
                             <input type="hidden" id="id" value={newProductoData.id} />
                             <div className="flex-auto">
                                 <label htmlFor="Nombre" className="font-bold block mb-2">Nombre</label>
-                                <InputText value={newProductoData.nombre} onChange={(e) => setNewProductoData({ ...newProductoData, nombre: e.target.value })} />
+                                <InputText value={newProductoData.nombre}
+                                    onChange={(e) => setNewProductoData({
+                                        ...newProductoData,
+                                        nombre: e.target.value
+                                    })} />
                             </div>
                             <div className="flex-auto">
                                 <label htmlFor="Referencia" className="font-bold block mb-2">Referencia</label>
-                                <InputText value={newProductoData.referencia} onChange={(e) => setNewProductoData({ ...newProductoData, referencia: e.target.value })} />
+                                <InputText value={newProductoData.referencia}
+                                    onChange={(e) => setNewProductoData({
+                                        ...newProductoData,
+                                        referencia: e.target.value
+                                    })} />
                             </div>
                             <div className="flex-auto">
                                 <label htmlFor="Precio" className="font-bold block mb-2">Precio</label>
-                                <InputText value={newProductoData.precio} onChange={(e) => setNewProductoData({ ...newProductoData, precio: e.target.value })} />
+                                <InputNumber
+                                    value={newProductoData.precio}
+                                    onValueChange={(e) => setNewProductoData({ ...newProductoData, precio: e.value })}
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                />
                             </div>
                             <div className="flex flex-wrap justify-content-center gap-4 -mb-3 " >
-                                <Button label="Guardar" className="p-button-success" onClick={handleInsertOrUpdate} />
-                                <Button label="Cancelar" className="p-button-secondary" onClick={() => setShowModal(false)} />
+                                <Button label="Guardar" className="p-button-success"
+                                    onClick={handleInsertOrUpdate} />
+                                <Button label="Cancelar" className="p-button-secondary"
+                                    onClick={() => setShowModal(false)} />
                             </div>
                         </div>
                     </div>

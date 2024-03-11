@@ -5,6 +5,7 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import Config from './Config'; // Importa el archivo Config.js
 import axios from 'axios';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -171,15 +172,18 @@ const Clientes = () => {
                     <h1>Listado de clientes</h1>
                 </div>
                 <div>
-                    <DataTable value={clientes} header={header} loading={loading} id="IDCLIENTE"
-                        responsive="true" paginator rows={10} rowsPerPageOptions={[5, 10, 25]} >
-                        <Column field="NOMBRES" header="Nombres" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="APELLIDOS" header="Apellidos" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="IDENTIDAD" header="Identidad" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="TELEFONO" header="Telefono" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column header="Acciones" headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} body={renderActions} />
-                        {/* Agrega más columnas según tus datos */}
-                    </DataTable>
+                    {loading && <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />}
+                    {!loading && (
+                        <DataTable value={clientes} header={header} loading={loading} id="IDCLIENTE"
+                            responsive="true" paginator rows={10} rowsPerPageOptions={[5, 10, 25]} >
+                            <Column field="NOMBRES" header="Nombres" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                            <Column field="APELLIDOS" header="Apellidos" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                            <Column field="IDENTIDAD" header="Identidad" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                            <Column field="TELEFONO" header="Telefono" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                            <Column header="Acciones" headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} body={renderActions} />
+                            {/* Agrega más columnas según tus datos */}
+                        </DataTable>
+                    )}
                 </div>
                 {/* Modal para agregar nuevo cliente */}
                 <Dialog visible={showModal} onHide={() => setShowModal(false)} header="Agregar Cliente">
