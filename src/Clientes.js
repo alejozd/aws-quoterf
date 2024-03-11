@@ -1,11 +1,12 @@
 // Clientes.js
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { Toast } from 'primereact/toast';
 import Config from './Config'; // Importa el archivo Config.js
 import axios from 'axios';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -28,6 +29,13 @@ const Clientes = () => {
     const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
     const [rowDataToDelete, setRowDataToDelete] = useState(null); // Guarda la fila que se eliminará
     const [loading, setLoading] = useState(true);
+    const toastTopRight = useRef(null);
+    const showMessage = (ref, severity, summary, detail) => {
+        ref.current.show({
+            severity: severity,
+            summary: summary, detail: detail, life: 3000
+        });
+    };
 
     //http://localhost:3000/clientes
     //https://quoterb.onrender.com/clientes
@@ -65,6 +73,8 @@ const Clientes = () => {
                     setShowModal(false);
                     fetchClientes(); // Otra función para recargar la lista de clientes
                     resetNewClienteData();
+                    showMessage(toastTopRight, 'info',
+                        newClienteData.nombres + ' ' + newClienteData.apellidos, 'Cliente actualizado correctamente');
                 })
                 .catch(error => {
                     console.error('Error al actualizar el cliente:', error);
@@ -82,6 +92,8 @@ const Clientes = () => {
                     setShowModal(false);
                     fetchClientes(); // Otra función para recargar la lista de clientes
                     resetNewClienteData();
+                    showMessage(toastTopRight, 'success',
+                        newClienteData.nombres + ' ' + newClienteData.apellidos, 'Cliente creado correctamente');
                 })
                 .catch(error => {
                     console.error('Error al agregar el cliente:', error);
@@ -127,6 +139,8 @@ const Clientes = () => {
             .then(response => {
                 console.log(response.data.message);
                 fetchClientes(); // Volver a cargar la lista de clientes después de eliminar
+                showMessage(toastTopRight, 'warn',
+                    rowDataToDelete.nombres + ' ' + rowDataToDelete.apellidos, 'Cliente eliminado correctamente');
             })
             .catch(error => {
                 console.error('Error al eliminar el cliente:', error);
@@ -172,6 +186,7 @@ const Clientes = () => {
                     <h1>Listado de clientes</h1>
                 </div>
                 <div>
+                    <Toast ref={toastTopRight} position="top-right" />
                     {loading && <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />}
                     {!loading && (
                         <DataTable value={clientes} header={header} loading={loading} id="IDCLIENTE"

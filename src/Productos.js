@@ -135,7 +135,7 @@ const Productos = () => {
             .then(response => {
                 console.log(response.data.message);
                 fetchProductos(); // Volver a cargar la lista de clientes después de eliminar
-                showMessage(toastTopRight, 'warn', newProductoData.nombre, 'Producto eliminado correctamente');
+                showMessage(toastTopRight, 'warn', rowDataToDelete.nombre, 'Producto eliminado correctamente');
             })
             .catch(error => {
                 console.error('Error al eliminar el producto:', error);
