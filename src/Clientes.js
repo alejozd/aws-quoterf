@@ -171,8 +171,8 @@ const Clientes = () => {
                     <h1>Listado de clientes</h1>
                 </div>
                 <div>
-                    <DataTable value={clientes} header={header} loading={loading}
-                        responsive="true" paginator rows={10} rowsPerPageOptions={[5, 10, 25]} id="IDCLIENTE">
+                    <DataTable value={clientes} header={header} loading={loading} id="IDCLIENTE"
+                        responsive="true" paginator rows={10} rowsPerPageOptions={[5, 10, 25]} >
                         <Column field="NOMBRES" header="Nombres" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
                         <Column field="APELLIDOS" header="Apellidos" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
                         <Column field="IDENTIDAD" header="Identidad" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />

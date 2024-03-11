@@ -18,8 +18,6 @@ const Productos = () => {
     const [productos, setProductos] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [newProductoData, setNewProductoData] = useState({
-        codigo: '',
-        subcodigo: '',
         nombre: '',
         referencia: '',
         precio: ''
@@ -91,8 +89,6 @@ const Productos = () => {
     const resetNewProductoData = () => {
         setNewProductoData({
             id: '',
-            codigo: '',
-            subcodigo: '',
             nombre: '',
             referencia: '',
             precio: ''
@@ -105,11 +101,9 @@ const Productos = () => {
         console.log('Editar cliente:', rowData);
         setNewProductoData({
             id: rowData.IDPRODUCTOS,
-            codigo: rowData.CODIGO_PRO,
-            subcodigo: rowData.SUBCODIGO_PRO,
-            nombre: rowData.NOMBRE_PRO,
-            referencia: rowData.REFERENCIA_PRO,
-            precio: rowData.PRECIO_PRO
+            nombre: rowData.NOMBRE,
+            referencia: rowData.REFERENCIA,
+            precio: rowData.PRECIO
         });
         setShowModal(true); // Mostrar el modal de edición
     };
@@ -141,8 +135,10 @@ const Productos = () => {
 
     const footerContent = (
         <div>
-            <Button label="Cancelar" icon="pi pi-times" onClick={() => cancelDelete(false)} className="p-button-text" />
-            <Button label="Sí" icon="pi pi-check" onClick={() => confirmDelete(false)} autoFocus />
+            <Button label="Cancelar" icon="pi pi-times"
+                onClick={() => cancelDelete(false)} className="p-button-text" />
+            <Button label="Sí" icon="pi pi-check"
+                onClick={() => confirmDelete(false)} autoFocus />
         </div>
     );
 
@@ -151,8 +147,13 @@ const Productos = () => {
     const renderActions = (rowData) => {
         return (
             <div className="flex flex-wrap justify-content-center gap-3 ">
-                <Button icon="pi pi-pencil" rounded text raised size='medium' aria-label="Editar" tooltip="Editar" tooltipOptions={{ position: 'left' }} style={{ color: 'slateblue', textAlign: 'center' }} onClick={() => handleEdit(rowData)} />
-                <Button icon="pi pi-times" rounded text raised size='medium' aria-label="Eliminar" tooltip="Eliminar" style={{ color: 'red' }} onClick={() => handleDelete(rowData)} />
+                <Button icon="pi pi-pencil" rounded text raised size='medium' aria-label="Editar"
+                    tooltip="Editar" tooltipOptions={{ position: 'left' }}
+                    style={{ color: 'slateblue', textAlign: 'center' }}
+                    onClick={() => handleEdit(rowData)} />
+                <Button icon="pi pi-times" rounded text raised size='medium' aria-label="Eliminar"
+                    tooltip="Eliminar" style={{ color: 'red' }}
+                    onClick={() => handleDelete(rowData)} />
             </div>
         );
     };
@@ -168,7 +169,7 @@ const Productos = () => {
     const header = renderHeader();
 
     const formatCurrency = (rowData) => {
-        return rowData.PRECIO_PRO.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }); // Cambia 'EUR' según la moneda que desees
+        return rowData.PRECIO.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }); // Cambia 'EUR' según la moneda que desees
     }
 
 
@@ -179,12 +180,11 @@ const Productos = () => {
                     <h1>Listado de Productos</h1>
                 </div>
                 <div>
-                    <DataTable value={productos} header={header} responsive="true" loading={loading} paginator rows={10} rowsPerPageOptions={[5, 10, 25]}>
-                        <Column field="CODIGO_PRO" header="Código" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="SUBCODIGO_PRO" header="Subcódigo" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="NOMBRE_PRO" header="Nombre" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="REFERENCIA_PRO" header="Referencia" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
-                        <Column field="PRECIO_PRO" header="Precio" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} body={formatCurrency} />
+                    <DataTable value={productos} header={header} responsive="true" id="IDPRODUCTO"
+                        loading={loading} paginator rows={10} rowsPerPageOptions={[5, 10, 25]}>
+                        <Column field="NOMBRE" header="Nombre" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                        <Column field="REFERENCIA" header="Referencia" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} />
+                        <Column field="PRECIO" header="Precio" sortable headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} body={formatCurrency} />
                         <Column header="Acciones" headerStyle={{ textAlign: 'center', fontSize: '1.2em' }} body={renderActions} />
                     </DataTable>
                 </div>
@@ -194,14 +194,6 @@ const Productos = () => {
                         <div >
                             {/* Formulario para agregar/editar producto */}
                             <input type="hidden" id="id" value={newProductoData.id} />
-                            <div className="flex-auto">
-                                <label htmlFor="Código" className="font-bold block mb-2">Código</label>
-                                <InputText value={newProductoData.codigo} onChange={(e) => setNewProductoData({ ...newProductoData, codigo: e.target.value })} />
-                            </div>
-                            <div className="flex-auto">
-                                <label htmlFor="Sub-Código" className="font-bold block mb-2">Sub-Código</label>
-                                <InputText value={newProductoData.subcodigo} onChange={(e) => setNewProductoData({ ...newProductoData, subcodigo: e.target.value })} />
-                            </div>
                             <div className="flex-auto">
                                 <label htmlFor="Nombre" className="font-bold block mb-2">Nombre</label>
                                 <InputText value={newProductoData.nombre} onChange={(e) => setNewProductoData({ ...newProductoData, nombre: e.target.value })} />
@@ -224,7 +216,7 @@ const Productos = () => {
                 {/* Diálogo de confirmación para eliminar */}
                 <Dialog header="Confirmar Eliminación" visible={confirmDialogVisible} onHide={() => setConfirmDialogVisible(false)} footer={footerContent}>
                     <div>
-                        <p>¿Estás seguro que deseas eliminar el producto {rowDataToDelete && `${rowDataToDelete.NOMBRE_PRO} ${rowDataToDelete.REFERENCIA_PRO}`}?</p>
+                        <p>¿Estás seguro que deseas eliminar el producto {rowDataToDelete && `${rowDataToDelete.NOMBRE} ${rowDataToDelete.REFERENCIA}`}?</p>
                     </div>
                 </Dialog>
             </div>
