@@ -1,5 +1,5 @@
 // Productos.js
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -7,6 +7,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { Toast } from 'primereact/toast';
 import Config from './Config';
 import axios from 'axios';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -27,6 +28,13 @@ const Productos = () => {
     const [loading, setLoading] = useState(true);
     const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
     const [rowDataToDelete, setRowDataToDelete] = useState(null);
+    const toastTopRight = useRef(null);
+    const showMessage = (ref, severity, summary, detail) => {
+        ref.current.show({
+            severity: severity,
+            summary: summary, detail: detail, life: 3000
+        });
+    };
 
     // Función para cargar los productos
     const fetchProductos = useCallback(() => {
@@ -63,6 +71,7 @@ const Productos = () => {
                     setShowModal(false);
                     fetchProductos(); // Otra función para recargar la lista de productos
                     resetNewProductoData();
+                    showMessage(toastTopRight, 'info', newProductoData.nombre, 'Producto actualizado correctamente');
                 })
                 .catch(error => {
                     console.error('Error al actualizar el productos:', error);
@@ -80,6 +89,7 @@ const Productos = () => {
                     setShowModal(false);
                     fetchProductos(); // Otra función para recargar la lista de productos
                     resetNewProductoData();
+                    showMessage(toastTopRight, 'success', newProductoData.nombre, 'Producto creado correctamente');
                 })
                 .catch(error => {
                     console.error('Error al agregar el producto:', error);
@@ -125,6 +135,7 @@ const Productos = () => {
             .then(response => {
                 console.log(response.data.message);
                 fetchProductos(); // Volver a cargar la lista de clientes después de eliminar
+                showMessage(toastTopRight, 'warn', rowDataToDelete.nombre, 'Producto eliminado correctamente');
             })
             .catch(error => {
                 console.error('Error al eliminar el producto:', error);
@@ -195,6 +206,7 @@ const Productos = () => {
                     <h1>Listado de Productos</h1>
                 </div>
                 <div>
+                    <Toast ref={toastTopRight} position="top-right" />
                     {loading && <ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" />}
                     {!loading && (
                         <DataTable value={productos} header={header} responsive="true" id="IDPRODUCTO"
